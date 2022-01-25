@@ -1,0 +1,16 @@
+[Unit]
+Description=Minecraft Server
+After=syslog.target network.target
+
+[Service]
+User=minecraft
+WorkingDirectory=/opt/minecraft
+
+ExecStart=/opt/minecraft/runServer.sh
+
+Restart=on-success
+
+StandardInput=null
+
+[Install]
+WantedBy=multi-user.target

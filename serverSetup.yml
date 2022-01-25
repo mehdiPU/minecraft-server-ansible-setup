@@ -21,16 +21,37 @@
   # change the line "eula=false" to "eula=true" to indicate that you except
   # the Minecraft End User License Agreement.
 
-  - name: Copy the Minecraft server related files to the server
+  - name: Ensure the Minecraft server related files are copied to the server
     copy:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}"
       owner: minecraft
-      mode: 0644
+      mode: "{{ item.mode }}"
+
     with_items:
+
+      # Server jar file
       - src: ./serverFiles/server.jar
         dest: /opt/minecraft/server.jar
+        mode: '0444'
+
+      # The eula file
       - src: ./serverFiles/eula.txt
         dest: /opt/minecraft/eula.txt
+        mode: '0644'
 
+      # The script that runs the server
+      - src: ./runServer.sh
+        dest: /opt/minecraft/runServer.sh
+        mode: '0544'
 
+      # The systemd service configuration file
+      - src: ./minecraft.service
+        dest: /etc/systemd/system/minecraft.service
+        mode: '0444'
+
+  - name: Ensure the Minecraft server is started now and at boot
+    service:
+      name: minecraft
+      state: started
+      enabled: true
