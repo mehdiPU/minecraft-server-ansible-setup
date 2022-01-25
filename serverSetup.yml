@@ -1,0 +1,16 @@
+---
+- hosts: testServer
+
+  tasks:
+  - name: Ensure Java Runtime Environment is installed
+    yum:
+      name: java-17-openjdk-headless
+      state: present
+    become: true
+
+  - name: Ensure minecraft user exists with it's home directory
+    user:
+      name: minecraft
+      create_home: true
+      home: /opt/minecraft
+    become: true
