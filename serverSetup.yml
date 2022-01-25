@@ -1,16 +1,36 @@
 ---
 - hosts: testServer
+  become: true
 
   tasks:
   - name: Ensure Java Runtime Environment is installed
     yum:
       name: java-17-openjdk-headless
       state: present
-    become: true
 
   - name: Ensure minecraft user exists with it's home directory
     user:
       name: minecraft
       create_home: true
       home: /opt/minecraft
-    become: true
+
+  # for the following you need to have the server jar and the eula.txt file
+  # in the serverFiles directory
+
+  # Execute the server for the first time to get the eula.txt file and
+  # change the line "eula=false" to "eula=true" to indicate that you except
+  # the Minecraft End User License Agreement.
+
+  - name: Copy the Minecraft server related files to the server
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: minecraft
+      mode: 0644
+    with_items:
+      - src: ./serverFiles/server.jar
+        dest: /opt/minecraft/server.jar
+      - src: ./serverFiles/eula.txt
+        dest: /opt/minecraft/eula.txt
+
+

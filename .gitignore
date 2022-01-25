@@ -1,2 +1,8 @@
+
 # Vagrant directory
 .vagrant
+
+# Minecraft server files
+serverFiles/*
+!serverFiles/README.txt
+
