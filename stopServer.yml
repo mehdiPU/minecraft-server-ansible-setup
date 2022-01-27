@@ -1,0 +1,20 @@
+---
+- hosts: server
+  become: yes
+
+  tasks:
+
+    - name: Stop the server
+      service:
+        name: minecraft
+        state: stopped
+
+    - name: Close ports
+      firewalld:
+        port: "{{ item.port }}"
+        state: disabled
+
+      with_items:
+        - port: '25565/tcp'
+        - port: '25565/udp'
+

@@ -1,0 +1,25 @@
+---
+- hosts: server
+  become: true
+
+  tasks:
+
+    - name: Check if a world already exists
+      stat:
+        path: /opt/minecraft/world
+      register: world_stat
+
+    - name: Backup the old world
+      command: mv /opt/minecraft/world /opt/minecraft/world.bk
+      when: world_stat.stat.exists
+      changed_when: world_stat.stat.exists
+
+    - name: Update server.properties
+      copy:
+        src: ./serverFiles/server.properties
+        dest: /opt/minecraft/server.properties
+        owner: minecraft
+        mode: '0664'
+
+- name: Restat Server playbook
+  import_playbook: restartServer.yml

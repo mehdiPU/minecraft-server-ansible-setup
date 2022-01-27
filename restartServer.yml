@@ -1,0 +1,19 @@
+---
+- hosts: server
+  become: yes
+
+  tasks:
+
+    - name: Ensure the ports are open
+      firewalld:
+        port: "{{ item.port }}"
+        state: enabled
+
+      with_items:
+        - port: '25565/tcp'
+        - port: '25565/udp'
+
+    - name: Restart the server
+      service:
+        name: minecraft
+        state: restarted
