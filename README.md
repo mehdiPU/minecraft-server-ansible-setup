@@ -1,2 +1,2 @@
 # minecraft-server-ansible-setup
-An ansible playbook to setup a minecraft server
+Asnible playbooks I use to perform tasks when starting or running a Minecraft Server.
